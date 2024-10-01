@@ -7,3 +7,19 @@ Thanks.
 
 At Ever,<br />
 BG
+
+
+## Lab_2 ##
+<h1> ArrayList: </h1>
+
+<h3> Declaration: </h3>
+        <p>ArrayList<Integer> myInt;
+        ArrayList<MyClass> myObject;</p>
+
+Allocation:
+        myInts = new ArrayList<>();
+
+
+## String Tokenization
+        Cutting string into parts and converts into substrings.
+
