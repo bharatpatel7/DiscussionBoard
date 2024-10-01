@@ -13,7 +13,7 @@ BG
 <h2> ArrayList: </h2>
 
 <h3> Declaration: </h3>
-        ArrayList<Integer> myInt;
+        ArrayList </Integer/> myInt;
         ArrayList<MyClass> myObject;<br />
 <h3> Allocation: </h3>
         myInts = new ArrayList<>();<br />
@@ -21,4 +21,6 @@ BG
 
 ## String Tokenization
         Cutting string into parts and converts into substrings.
+
+
 
