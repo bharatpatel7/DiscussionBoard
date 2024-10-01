@@ -9,15 +9,15 @@ At Ever,<br />
 BG
 
 
-## Lab_2 ##
-<h1> ArrayList: </h1>
+<h1> ## Lab - 2 ## </h1>
+<h2> ArrayList: </h2>
 
 <h3> Declaration: </h3>
         <p>ArrayList<Integer> myInt;
-        ArrayList<MyClass> myObject;</p>
+        ArrayList<MyClass> myObject;</p><br />
 
-Allocation:
-        myInts = new ArrayList<>();
+<h3> Allocation: </h3>
+        myInts = new ArrayList<>();<br />
 
 
 ## String Tokenization
