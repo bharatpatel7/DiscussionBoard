@@ -13,8 +13,8 @@ BG
 <h2> ArrayList: </h2>
 
 <h3> Declaration: </h3>
-        <p>ArrayList<Integer> myInt;
-        ArrayList<MyClass> myObject;</p><br />
+        ArrayList<Integer> myInt;
+        ArrayList<MyClass> myObject;<br />
 <h3> Allocation: </h3>
         myInts = new ArrayList<>();<br />
 
