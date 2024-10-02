@@ -1,186 +1,164 @@
-import java.util.Scanner;
+/*
+Author: Bharat Garsondiya
+Date: 2021-09-30
+Last Modified: 2021-09-30
+Student ID: 1303213
+compile: javac DiscussionBoard.java
+*/
+
+import java.util.*;
 
 public class DiscussionBoard {
         
-        private static final String[] posts = new String[100];
-        private static int postCount = 0;
+        private static ArrayList<User> users = new ArrayList<>();
+        private static ArrayList<Post> posts = new ArrayList<>();
 
         public static void main(String[] args) {
-                
-                // System.out.println("Enter Responce:");
-                // Scanner inputScanner = new Scanner(System.in);
-                // int myInput = inputScanner.nextInt();
-                int choice;
                 Scanner scanner = new Scanner(System.in);
-                
-                do {
+                int choice;
+
+                do { 
                         System.out.println("Menu:");
-                        System.out.println("(1) Post new message");
-                        System.out.println("(2) Print all posts");
-                        System.out.println("(3) Print all posts in reverse order");
-                        System.out.println("(4) Print number of posts entered so far");
-                        System.out.println("(5) Print all posts from a user");
-                        System.out.println("(6) Print the number of vowels across all posts");
-                        System.out.println("(7) Perform a search of posts containing a given word (case sensitive)");
-                        System.out.println("(8) Perform a search of posts containing a given word (case insensitive)");
-                        System.out.println("(9) End Program");
-                        System.out.print("Choose an option: ");
+                        System.out.println("1. Create a new user");
+                        System.out.println("2. Create a new post");
+                        System.out.println("3. Display all posts");
+                        System.out.println("4. View all posts with a given username");
+                        System.out.println("5. View all posts with a given keyword");
+                        System.out.println("6. Exit");
+                        System.out.print("Enter your choice: ");
                         choice = scanner.nextInt();
                         scanner.nextLine();
 
-                switch (choice) {
-                        case 1:
-                                System.out.println("Post a new massage");
-                                postNewMassage(scanner);
-                                printAllPostsInReverseOrder();
-                                break;
+                        switch (choice) {
+                                case 1:
+                                        createNewUser(scanner);
+                                        break;
 
-                        case 2:
-                                System.out.println("Print all posts");
-                                printAllPosts();
-                                break;
+                                case 2:
+                                        createNewPost(scanner);
+                                        break;
+                                
+                                case 3:
+                                        displayAllPosts();
+                                        break;
 
-                        case 3:
-                                System.out.println("Print all posts in reverse order");
-                                printAllPostsInReverseOrder();
-                                break;
+                                case 4:
+                                        viewPostsByUser(scanner);
+                                        break;
 
-                        case 4:
-                                System.out.println("Print number of posts entered so far");
-                                printNumberOfPosts();
-                                break;
+                                case 5:
+                                        viewPostsByKeyword(scanner);
+                                        break;
 
-                        case 5:
-                                System.out.println("Print all posts from a user");
-                                printPostsFromUser(scanner);
-                                break;
+                                case 6:
+                                        System.out.println("Exiting...");
+                                        break;
 
-                        case 6:
-                                System.out.println("Print the number of vowels across all posts");
-                                printVowelCount();
-                                break;
+                                default:
+                                        System.out.println("Invalid choice. Please try again.");
+                        }
+                        
+                } while (choice != 6);
 
-                        case 7:
-                                System.out.println("Perform a search of posts containing a given word (case sensitive)");
-                                searchPostsContainingWord(scanner, true);
-                                break;
-
-                        case 8:
-                                System.out.println("Perform a search of posts containing a given word (case insensitive)");
-                                searchPosts(scanner, false);
-                                break;
-
-                        case 9:
-                                System.out.println("End Program");
-                                break;
-                
-                        default:
-                                System.out.println("You have entered wrong number!");
-                                break;
-                }
-
-                } while (choice != 9);
                 scanner.close();
         }
-        
-        private static void postNewMassage(Scanner scanner){
-                //scanner.nextLine(); 
-                System.out.println("Enter the user name:");
-                String userName = scanner.nextLine();
-                System.out.println("Enter the message:");
-                String message = scanner.nextLine();
-                posts[postCount++] = userName + " Says: " + message;
+
+        private static void createNewUser(Scanner scanner){
+                System.out.print("Enter full name: ");
+                String fullName = scanner.nextLine();
+                System.out.print("Enter username: (or leave blank to use default) ");
+                String userName = scanner.nextLine().trim();
+                
+                for (User user : users) {
+                        if (user.getUserName().equals(fullName)) {
+                                System.out.println("Username already exists. Please try again.");
+                                return;
+                        }
+                }
+
+                User user = new User(fullName, userName);
+                users.add(user);
+                System.out.println("User created:" + user.getUserName() + "(@" + user.getUserName() + ")");
         }
 
-        private static void printAllPosts(){
-                for (int i = 0; i < postCount; i++) {
-                        System.out.println(posts[i]);
+        private static void createNewPost(Scanner scanner){
+                System.out.println("Enter your Username: ");
+                String fullName = scanner.nextLine().toLowerCase();
+
+                User user = null;
+                for (User u : users) {
+                        if (u.getUserName().equalsIgnoreCase(fullName)) {
+                                user = u;
+                                break;
+                        }
+                }
+
+                if (user == null) {
+                        System.out.println("User not found. Please create a new user first.");
+                        return;
+                }
+
+                System.out.print("Enter Post title: ");
+                String title = scanner.nextLine();
+                System.out.print("Enter Post content: ");
+                String content = scanner.nextLine();
+
+                Post newPost = new Post(title, content, user);
+                posts.add(newPost);
+                System.out.println("Post created Sucsessfully!");
+                
+        }
+
+        private static void displayAllPosts(){
+
+                if (posts.isEmpty()) {
+                        System.out.println("No posts to display.");
+                        return;
+                }
+                else
+                {
+                        for (Post post : posts) {
+                                System.out.println(post);
+                                System.out.println("=====================================");
+                        }
                 }
         }
 
-        private static void printAllPostsInReverseOrder(){
-                for (int i = postCount - 1; i >= 0; i--) {
-                        System.out.println(posts[i]);
-                }
-        }
+        private static void viewPostsByUser(Scanner scanner){
+                System.out.print("Enter username: ");
+                String userName = scanner.nextLine().toLowerCase();
 
-        private static void printNumberOfPosts(){
-                System.out.println("Number of posts entered so far: " + postCount);
-        }
-
-        private static void printPostsFromUser(Scanner scanner) {
-                System.out.print("Enter the user's name: ");
-                String user = scanner.nextLine().toLowerCase(); 
                 boolean found = false;
-                        for (int i = 0; i < postCount; i++) {
-                                if (posts[i].toLowerCase().startsWith(user + " says: ")) {
-                                System.out.println(posts[i]);
+                for (Post post : posts) {
+                        if (post.getUser().getUserName().equalsIgnoreCase(userName)) {
+                                System.out.println(post);
+                                System.out.println("=====================================");
                                 found = true;
                         }
-        }
-        if (!found) {
-                System.out.println("No posts from this user.");
-        }
-        }
-
-        private static void printVowelCount() {
-                int vowelCount = 0;
-                for (int i = 0; i < postCount; i++) {
-                        String post = posts[i].toLowerCase();
-        
-                        String actualMessage = post.substring(post.indexOf(" says: ") + 7); 
-
-                        for (char c : actualMessage.toCharArray()) {
-                        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-                                vowelCount++;
-                        }
-                        }
                 }
 
-                System.out.println("Total number of vowels across all posts: " + vowelCount);
-        }
-
-        private static void searchPostsContainingWord(Scanner scanner, boolean caseSensitive) {
-                System.out.print("Enter the word to search for: ");
-                String word = scanner.nextLine();
-                boolean found = false;
-                for (int i = 0; i < postCount; i++) {
-                        if (caseSensitive) {
-                                if (posts[i].contains(word)) {
-                                        System.out.println(posts[i]);
-                                        found = true;
-                                }
-                        } else {
-                                if (posts[i].toLowerCase().contains(word.toLowerCase())) {
-                                        System.out.println(posts[i]);
-                                        found = true;
-                                }
-                        }
-                }
                 if (!found) {
-                        System.out.println("No posts containing this word.");
+                        System.out.println("No posts found for this user: " + userName);
                 }
         }
 
-        private static void searchPosts(Scanner scanner, boolean caseSensitive) {
-                System.out.print("Enter the word to search for: ");
-                String word = scanner.nextLine();
-                boolean found = false;
+        private static void viewPostsByKeyword(Scanner scanner){
+                System.out.print("Enter keyword: ");
+                String keyword = scanner.nextLine().toLowerCase();
 
-                for (int i = 0; i < postCount; i++) {
-                        String post = caseSensitive ? posts[i] : posts[i].toLowerCase(); 
-                        String searchTerm = caseSensitive ? word : word.toLowerCase();  
-                        if (post.contains(searchTerm)) {
-                        System.out.println(posts[i]);  
-                        found = true;
+                boolean found = false;
+                for (Post post : posts) {
+                        if (post.getTitle().toLowerCase().contains(keyword) || post.getContent().toLowerCase().contains(keyword)) {
+                                System.out.println(post);
+                                System.out.println("=====================================");
+                                found = true;
                         }
                 }
 
                 if (!found) {
-                        System.out.println("No posts contain the word \"" + word + "\".");
+                        System.out.println("No posts found for this keyword: " + keyword);
                 }
-}
-
-
+        }
 
 }
+
