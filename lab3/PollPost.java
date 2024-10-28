@@ -9,8 +9,10 @@ public class PollPost extends Post {
         //super(id, title, options, user);
         super(id, title, optionsString, user);
         String[] optionsArray = optionsString.split(",");
+        int optionNumber = 1;
         for (String option : optionsArray) {
-            options.put(option.trim(), 0); // Initialize vote count to 0
+            options.put(optionNumber + "." + option.trim(), 0); // Initialize vote count to 0
+            optionNumber++;
         }
     }
 
@@ -32,15 +34,15 @@ public class PollPost extends Post {
     @Override
     public void display() {
         System.out.println(this.toString());
-        int optionNumber = 1;
         for (Map.Entry<String, Integer> entry : options.entrySet()) {
-            System.out.println(optionNumber + "." + entry.getKey() + " :" + entry.getValue());
-            optionNumber++;
+            System.out.println(entry.getKey() + " :" + entry.getValue());
         }
     }
 
     @Override
     public String toString() {
-        return "Post #" + postId + "\nCreated by: " + user.getFullName() + "  (@" + user.getUserName() + ")\nTitle: " + title + "\n" + getContent();
-    }
+        return "PollPost{" +
+                "options=" + options +
+                '}';
+}
 }

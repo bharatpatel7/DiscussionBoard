@@ -224,7 +224,7 @@ public class DiscussionBoard implements Serializable {
                 PollPost pollPost = (PollPost) post;
                 pollPost.display();
                 System.out.print("Enter option number to vote: ");
-                int optionIndex = scanner.nextInt() - 1;
+                int optionIndex = scanner.nextInt();
                 pollPost.vote(optionIndex);
         } else {
                 System.out.println("The selected post is not a poll.");
