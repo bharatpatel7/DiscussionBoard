@@ -1,12 +1,15 @@
 /*
 Author: Bharat Garsondiya
 Date: 2024-09-30
-Last Modified: 2024-10-3
+Last Modified: 2021-10-3
 Student ID: 1303213
 compile: javac DiscussionBoard.java
 */
 
+package lab3;
+
 import java.util.*;
+
 
 public class DiscussionBoard {
         
@@ -70,11 +73,11 @@ public class DiscussionBoard {
                 String userName = scanner.nextLine().trim();
                 
                 for (User user : users) {
-                        if (user.getUserName().equals(fullName)) {
+                        if (user.getUserName().equals(userName)) {
                                 System.out.println("Username already exists. Please try again.");
                                 return;
                         }
-                }
+                }6
 
                 User user = new User(fullName, userName);
                 users.add(user);
@@ -159,6 +162,28 @@ public class DiscussionBoard {
                         System.out.println("No posts found for this keyword: " + keyword);
                 }
         }
+
+        // public class TextPost extends Post {
+        //         private String content;
+
+        //         public TextPost(String title, String content, User user) {
+        //                 super(title, user);
+        //                 this.content = content;
+        //         }
+
+        //         @Override
+        //         public String getContent() {
+        //                 return content;
+        //         }
+
+        //         @Override
+        //         public void display() {
+        //                 System.out.println(this.toString());
+        //                 System.out.println(content);
+        //         }
+        // }
+
+
 
 }
 

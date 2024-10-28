@@ -1,6 +1,8 @@
+package lab3;
 
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
         private String fullName;
         private String userName;
 

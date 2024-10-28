@@ -1,4 +1,10 @@
-public abstract  class Post{
+package lab3;
+
+import java.io.Serializable;
+
+public abstract  class Post implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private static int idCounter = 0;
         protected int postId;
         protected  String title;
@@ -6,11 +12,15 @@ public abstract  class Post{
         protected  User user;
         
 
-        public Post(String title, String content, User user) {
+        public Post(int postId, String title, String content, User user) {
                 this.postId = ++idCounter;
                 this.title = title;
                 Content = content;
                 this.user = user;
+        }
+
+        public int getPostId() {
+                return postId;
         }
 
         public User getUser() {
@@ -23,6 +33,10 @@ public abstract  class Post{
 
         public String getContent() {
                 return Content;
+        }
+
+        public void setPostId(int postId) {
+                this.postId = postId;
         }
 
         @Override
