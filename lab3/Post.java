@@ -2,20 +2,19 @@ package lab3;
 
 import java.io.Serializable;
 
-public abstract  class Post implements Serializable {
+public abstract class Post implements Serializable {
         private static final long serialVersionUID = 1L;
-
         private static int idCounter = 0;
+
         protected int postId;
         protected  String title;
-        protected  String Content;
+        //protected  String Content;
         protected  User user;
         
 
-        public Post(int postId, String title, String content, User user) {
+        public Post(String title, User user) {
                 this.postId = ++idCounter;
                 this.title = title;
-                Content = content;
                 this.user = user;
         }
 
@@ -31,20 +30,20 @@ public abstract  class Post implements Serializable {
                 return title;
         }
 
-        public String getContent() {
-                return Content;
-        }
+        // public String getContent() {
+        //         return Content;
+        // }
 
         public void setPostId(int postId) {
                 this.postId = postId;
         }
 
-        @Override
-        public String toString() {
-                return "Post #" + postId + "\nCreated by: " + user.getFullName() + "  (@" + user.getUserName() + ")\nTitle: " + title;
-        }
+        // @Override
+        // public String toString() {
+        //         return "Post #" + postId + "\nCreated by: " + user.getFullName() + "  (@" + user.getUserName() + ")\nTitle: " + title;
+        // }
 
-        public abstract void display();
+        public abstract String toString();
         
 }
 

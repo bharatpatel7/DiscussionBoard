@@ -1,28 +1,20 @@
 package lab3;
-public class TextPost extends Post {
-    private int id;
-    private String title;
+
+import java.io.Serializable;
+
+public class TextPost extends Post implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String content;
-    private User user;
 
 
-    public TextPost(int id, String title, String content, User user) {
-        super(id, title, content, user);
-        this.id = id;
-        this.title = title;
+    public TextPost(String title, String content, User user) {
+        super(title, user);
         this.content = content;
-        this.user = user;
     }
 
-    @Override
     public String getContent() {
-        return content;
-    }
-
-    @Override
-    public void display() {
-        System.out.println(this.toString());
-        System.out.println(content);
+        return "content";
     }
 
     @Override

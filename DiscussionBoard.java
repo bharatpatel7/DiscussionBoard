@@ -11,6 +11,7 @@ package lab3;
 import java.util.*;
 
 
+
 public class DiscussionBoard {
         
         private static ArrayList<User> users = new ArrayList<>();

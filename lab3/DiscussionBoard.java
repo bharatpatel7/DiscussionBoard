@@ -24,9 +24,9 @@ public class DiscussionBoard implements Serializable {
                 Scanner scanner = new Scanner(System.in);
                 int choice;
 
-               String fileName = "./boards/";
+               String fileName = "default";
                 if (args.length > 0) {
-                        fileName += args[0] + ".dboard";
+                        fileName = args[0];
                         loadDiscussionBoard(fileName);
                 } else {
                         System.out.println("No file specified. Starting a blank discussion board.");
@@ -133,21 +133,32 @@ public class DiscussionBoard implements Serializable {
 
                 Post newPost = null;
 
-                if (postType.equals("text")) {
-                        System.out.print("Enter post content: ");
+
+                if (postType.equals("text")){
+                        System.out.println("Enter Post Content: ");
                         String content = scanner.nextLine();
-                        newPost = new TextPost(postIdCounter++, title, content, user);
-                        
-                } else if (postType.equals("poll")) {
-                        System.out.print("Enter poll options separated by semicolons (e.g., 'Option1;Option2;Option3'): ");
-                        String options = scanner.nextLine();
-                        newPost = new PollPost(postIdCounter++, title, options, user);
-                } else {
+                        newPost = new TextPost(title, content, user);
+                        //posts.add(newPost);
+                }
+                else if (postType.equals("poll")){
+                        newPost = new PollPost(title, user);
+                        System.out.println("Enter number of options(Sepreted by ';'): ");
+                        String[] options = scanner.nextLine().split(";");
+
+                        for (String option : options) {
+                                ((PollPost) newPost).addOption(option);
+                        }
+                        //posts.add(newPost);
+                }
+                else {
                         System.out.println("Invalid post type. Please try again.");
+                        return;
                 }
 
+                newPost.setPostId(postIdCounter++);
                 posts.add(newPost);
-                System.out.println("Post created successfully!");
+
+                System.out.println("Post created successfully.");
         }
 
 
@@ -190,7 +201,7 @@ public class DiscussionBoard implements Serializable {
 
                 boolean found = false;
                 for (Post post : posts) {
-                        if (post.getTitle().toLowerCase().contains(keyword) || post.getContent().toLowerCase().contains(keyword)) {
+                        if (post.getTitle().toLowerCase().contains(keyword) || (post instanceof TextPost && ((TextPost) post).getContent().toLowerCase().contains(keyword))) {
                                 System.out.println(post);
                                 System.out.println("=====================================");
                                 found = true;
@@ -207,59 +218,76 @@ public class DiscussionBoard implements Serializable {
                 int postId = scanner.nextInt();
                 scanner.nextLine();  // consume newline
 
-                Post post = null;
-                for (Post p : posts) {
-                        if (p.getPostId() == postId) {
-                        post = p;
-                        break;
+                Post post = findPostById(postId);
+                if (post instanceof PollPost){
+                        PollPost pollPost = (PollPost) post;
+                        System.out.println(pollPost);
+
+                        int optionNumber = 1;
+                        for (String option : pollPost.getOptions().keySet()) {
+                                System.out.println(optionNumber + ". " + option);
+                                optionNumber++;
+                        }
+
+                        System.out.print("Enter option number to vote: ");
+                        int selectedOption = scanner.nextInt();
+                        scanner.nextLine();  // consume newline
+
+                        if (selectedOption > 0 && selectedOption <= pollPost.getOptions().size()) {
+                                String selectedOptionText = (String) pollPost.getOptions().keySet().toArray()[selectedOption - 1];
+                                pollPost.vote(selectedOptionText);
+                                System.out.println("Vote successful.");
+                        } else {
+                                System.out.println("Invalid option number. Please try again.");
+                        }
+                }else{
+                        System.out.println("Post is not a poll. Please try again.");
+                }
+        }
+
+        private static Post findPostById(int postId) {
+                for (Post post : posts) {
+                        if (post.getPostId() == postId) {
+                                return post;
                         }
                 }
-
-        if (post == null) {
-                System.out.println("Post not found.");
-                return;
-        }
-
-        if (post instanceof PollPost) {
-                PollPost pollPost = (PollPost) post;
-                pollPost.display();
-                System.out.print("Enter option number to vote: ");
-                int optionIndex = scanner.nextInt();
-                pollPost.vote(optionIndex);
-        } else {
-                System.out.println("The selected post is not a poll.");
-        }
+                return null;
         }
 
         private static void saveDiscussionBoard(String fileName) {
                 File file = new File("./boards/" + fileName + ".dboard");
+                System.out.println("Saving discussion board to " + file.getAbsolutePath());
+                
                 try (FileOutputStream fileOut = new FileOutputStream(file);
                         ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                                System.out.println("Users: " + users);
+                                System.out.println("Posts: " + posts);
                         out.writeObject(users);
                         out.writeObject(posts);
-                        System.out.println("Discussion board saved successfully to " + fileName + ".dboard");
+                        System.out.println("Discussion board saved successfully to " + file.getAbsolutePath());
                 } catch (IOException e) {
                         System.out.println("Error saving discussion board: " + e.getMessage());
+                        //e.printStackTrace();
                 }
         }
 
         @SuppressWarnings("unchecked")
-        private static void loadDiscussionBoard(String fileName) {
-                File file = new File(fileName);
-                if (!file.exists()) {
-                        System.out.println("File not found. Starting a blank discussion board.");
-                        return;
-                }
+private static void loadDiscussionBoard(String fileName) {
+    File file = new File("./boards/" + fileName + ".dboard");
+    if (!file.exists()) {
+        System.out.println("File not found at " + file.getAbsolutePath() + ". Starting a blank discussion board.");
+        return;
+    }
 
-                try (FileInputStream fileIn = new FileInputStream(file);
-                        ObjectInputStream in = new ObjectInputStream(fileIn)) {
-                        users = (ArrayList<User>) in.readObject();
-                        posts = (ArrayList<Post>) in.readObject();
-                        System.out.println("Discussion board loaded successfully from " + fileName);
-                } catch (IOException | ClassNotFoundException e) {
-                        System.out.println("Error loading discussion board: " + e.getMessage());
-                }
-        }
+    try (FileInputStream fileIn = new FileInputStream(file);
+         ObjectInputStream in = new ObjectInputStream(fileIn)) {
+        users = (ArrayList<User>) in.readObject();
+        posts = (ArrayList<Post>) in.readObject();
+        System.out.println("Discussion board loaded successfully from " + file.getAbsolutePath());
+    } catch (IOException | ClassNotFoundException e) {
+        System.out.println("Error loading discussion board: " + e.getMessage());
+    }
+}
 
 
 
