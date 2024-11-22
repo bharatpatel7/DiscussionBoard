@@ -1,13 +1,19 @@
-public abstract  class Post{
-        private static int idCounter = 0;
-        protected int postId;
-        protected  String title;
-        protected  String Content;
-        protected  User user;
-        
+package DiscussionBoard;
 
-        public Post(String title, String content, User user) {
-                this.postId = ++idCounter;
+public class Post {
+        private String title;
+        private String Content;
+        private User user;
+
+        public Post(String title, String content, User user) throws IllegalArgumentException {
+                
+                if (title == null || title.trim().isEmpty()) {
+                        throw new IllegalArgumentException("Title cannot be empty.");
+                }
+                if (content == null || content.trim().isEmpty()) {
+                        throw new IllegalArgumentException("Content cannot be empty.");
+                }
+                
                 this.title = title;
                 Content = content;
                 this.user = user;
@@ -27,10 +33,7 @@ public abstract  class Post{
 
         @Override
         public String toString() {
-                return "Post #" + postId + "\nCreated by: " + user.getFullName() + "  (@" + user.getUserName() + ")\nTitle: " + title;
+                return "Created by: " + user.getFullName() + "  (@" + user.getUserName() + ")\nTitle: " + title + "\n" + Content;
         }
-
-        public abstract void display();
         
 }
-
