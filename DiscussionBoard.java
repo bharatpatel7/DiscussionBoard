@@ -19,6 +19,7 @@ public class DiscussionBoard {
         private CreatePostPanel createPostPanel;
         private SearchPostsPanel searchPostsPanel;
         private JPanel mainPanel;
+        
 
         public static ArrayList<User> users = new ArrayList<>();
         public static ArrayList<Post> posts = new ArrayList<>();
@@ -40,6 +41,7 @@ public class DiscussionBoard {
                 mainPanel.add(new CreatePostPanel(), "CreatePost");
                 mainPanel.add(searchPostsPanel, "searchPostsPanel");
 
+
                 JMenuBar menuBar = new JMenuBar();
                 JMenu menu = new JMenu("Options");
                 JMenuItem registerMenuItem = new JMenuItem("Register User");
@@ -49,6 +51,7 @@ public class DiscussionBoard {
                         CardLayout cl = (CardLayout) mainPanel.getLayout();
                         cl.show(mainPanel, "CreatePost");
                 });
+
 
                 registerMenuItem.addActionListener(e -> switchPanel("registerUserPanel"));
                 createPostMenuItem.addActionListener(e -> switchPanel("createPostPanel"));
@@ -62,6 +65,7 @@ public class DiscussionBoard {
 
                 frame.add(mainPanel);
                 frame.setVisible(true);
+                
         }
 
         private void switchPanel(String panelName) {

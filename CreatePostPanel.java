@@ -8,59 +8,85 @@ import javax.swing.*;
 
 public class CreatePostPanel extends JPanel {
 
+        private JTextField userNameField;
+        private JTextArea contentArea;
+        private JTextArea massageArea;
+
         public CreatePostPanel(){
 
                 setLayout(new BorderLayout());
 
-                JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-                JLabel userNameLabel = new JLabel("User Name:");
-                JTextField userNameField = new JTextField(10);
-                JLabel titLabel = new JLabel("Enter Post Title:");
-                JTextField titleField = new JTextField();
-                JLabel contentLabel = new JLabel("Enter Post Content:");
-                JTextArea contentArea = new JTextArea(10, 30);
+                JPanel mainPanel = new JPanel(new BorderLayout());
+                mainPanel.setBorder(BorderFactory.createTitledBorder("Create Post"));
+
+                JPanel rightJPanel = new JPanel(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.insets = new Insets(10, 10, 10, 10);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.gridwidth = 2;
+                rightJPanel.add(new JLabel("Userame:"), gbc);
+
+                gbc.gridy = 1;
+                //gbc.gridx = 2;
+                gbc.gridwidth = 2;
+                userNameField = new JTextField();
+                rightJPanel.add(userNameField, gbc);
+
+                gbc.gridy = 2;
+                //gbc.gridx = 2;
+                gbc.gridwidth = 2;
+                rightJPanel.add(new JLabel("Post Content:"), gbc);
+
+                gbc.gridy = 3;
+                //gbc.gridx = 1;
+                gbc.gridwidth = 2;
+                contentArea = new JTextArea();
                 contentArea.setLineWrap(true);
                 contentArea.setWrapStyleWord(true);
-                JScrollPane scrollPane = new JScrollPane(contentArea);
-
-                inputPanel.add(userNameLabel);
-                inputPanel.add(userNameField);
-                inputPanel.add(titLabel);
-                inputPanel.add(titleField);
-                inputPanel.add(contentLabel);
-                inputPanel.add(scrollPane);
-
-                JPanel buttonPanel = new JPanel(new FlowLayout());
+                JScrollPane contentScrollPane = new JScrollPane(contentArea);
+                contentScrollPane.setPreferredSize(new Dimension(300, 150));
+                rightJPanel.add(new JScrollPane(contentArea), gbc);
+                
+                gbc.gridy = 4;
+                gbc.gridwidth = 2;
+                gbc.anchor = GridBagConstraints.CENTER;
                 JButton createPostButton = new JButton("Create Post");
-                JTextArea messageArea = new JTextArea(5, 30);
-                messageArea.setEditable(false);
-                messageArea.setLineWrap(true);
-                messageArea.setWrapStyleWord(true);
-                JScrollPane messageScrollPane = new JScrollPane(messageArea);
+                createPostButton.setPreferredSize(new Dimension(200, 30));
+                rightJPanel.add(createPostButton, gbc);
 
-                buttonPanel.add(createPostButton);
+                mainPanel.add(rightJPanel, BorderLayout.WEST);
 
-                add(inputPanel, BorderLayout.NORTH);
-                add(buttonPanel, BorderLayout.CENTER);
-                add(messageScrollPane, BorderLayout.SOUTH);
+                JPanel leftPanel = new JPanel(new BorderLayout());
+                leftPanel.add(new JLabel("Massage: "), BorderLayout.NORTH);
+                massageArea = new JTextArea();
+                massageArea.setEditable(false);
+                leftPanel.add(new JScrollPane(massageArea), BorderLayout.CENTER);
+
+                mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+                add(mainPanel, BorderLayout.CENTER);
+
 
                 createPostButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                                 String userName = userNameField.getText().trim().toLowerCase();
-                                String title = titleField.getText().trim();
+                                //String title = titleField.getText().trim();
                                 String content = contentArea.getText().trim();
 
                                 if (userName.isEmpty()) {
-                                        messageArea.setText("User Name cannot be empty.");
+                                        massageArea.setText("User Name cannot be empty.");
                                         return;
                                 }
-                                if (title.isEmpty()) {
-                                        messageArea.setText("Title cannot be empty.");
-                                        return;
-                                }
+                                // if (title.isEmpty()) {
+                                //         messageArea.setText("Title cannot be empty.");
+                                //         return;
+                                // }
                                 if (content.isEmpty()) {
-                                        messageArea.setText("Content cannot be empty.");
+                                        massageArea.setText("Content cannot be empty.");
                                         return;
                                 }
 
@@ -73,19 +99,20 @@ public class CreatePostPanel extends JPanel {
                                 }
 
                                 if (user == null) {
-                                        messageArea.setText("Error: User '" + userName + "'not found. Please create a new user first.");
+                                        massageArea.setText("Error: User '" + userName + "'not found. Please create a new user first.");
                                         return;
                                 }
 
                                 try{
-                                        Post post = new Post(title, content, user);
+                                        //Post post = new Post(title, content, user);
+                                        //DiscussionBoard.posts.add(post);
+                                        String title = "Default Title"; // or retrieve the title from a field if available
+                                        Post post = new Post(content, user);
                                         DiscussionBoard.posts.add(post);
-
                                         DiscussionBoard.userPostMap.computeIfAbsent(user.getUserName(), k -> new ArrayList<>()).add(DiscussionBoard.posts.size() - 1);
-                                        messageArea.setText("Post created successfully by @" + user.getUserName());
+                                        massageArea.setText("Post created successfully by @" + user.getUserName() + "." + "\nPost Content: " + content);
                                 } catch (Exception ex) {
-                                        messageArea.setText(ex.getMessage());
-                                        return;
+                                        massageArea.setText(ex.getMessage());
                                 }
                         }
                 });
