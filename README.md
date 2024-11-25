@@ -69,7 +69,7 @@ User.java
 
 
             User.class
-```
+
 
 ## Classes
 
@@ -122,4 +122,3 @@ Bharat Garsondiya
 ## License
 
 This project is licensed under the MIT License.
-```
