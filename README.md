@@ -4,7 +4,7 @@
 
 ## Overview
 
-This project is a simple discussion board application built using Java Swing. Users can register, create posts, and search for posts. The application features a graphical user interface with different panels for each functionality. <br> Basically it was part of my school and all the functionality is based on prof's requirement where I got 100/100 so this project is proper accordingly outline.
+This project is a simple discussion board application built using Java Swing. Users can register, create posts, and search for posts. The application features a graphical user interface with different panels for each functionality. Basically it was part of my school and all the functionality is based on prof's requirement where I got 100/100 so this project is proper accordingly outline.
 
 ## Project Structure
 
